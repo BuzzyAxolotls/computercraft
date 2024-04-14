@@ -1,0 +1,54 @@
+-- Function to check if the block is diorite
+local function isDiorite(block)
+    return block.name == "minecraft:diorite"
+end
+
+-- Function to check if the block is a valuable block (diorite in this case)
+local function isValuable(block)
+    return isDiorite(block)
+end
+
+-- Function to mine a vein of diorite
+local function mineVein()
+    -- Start by moving forward
+    while true do
+        -- Move forward
+        turtle.dig()
+        if not turtle.forward() then
+            -- If can't move forward, turn left and try again
+            turtle.turnLeft()
+            turtle.dig()
+            if not turtle.forward() then
+                -- If can't move forward after turning left, turn right and then back and try again
+                turtle.turnRight()
+                turtle.turnRight()
+                turtle.dig()
+                turtle.forward()
+                turtle.turnLeft()
+            end
+        end
+
+        -- Check the block in front
+        local success, block = turtle.inspect()
+        if success then
+            -- If the block is valuable, mine it and start a recursive vein mining
+            if isValuable(block) then
+                turtle.dig()
+                mineVein()
+            end
+        else
+            -- If there's no block in front, turn around and return
+            turtle.turnLeft()
+            turtle.turnLeft()
+            while not turtle.forward() do
+                turtle.dig()
+            end
+            turtle.turnLeft()
+            turtle.turnLeft()
+            return
+        end
+    end
+end
+
+-- Call the main function
+mineVein()
