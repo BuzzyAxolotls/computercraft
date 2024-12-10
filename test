@@ -1,4 +1,3 @@
-https://bit.ly/2z0m09k
 -- Function to check if the block is diorite
 local function isDiorite(block)
     return block.name == "minecraft:diorite"
